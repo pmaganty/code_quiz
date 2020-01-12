@@ -1,0 +1,30 @@
+#choice {
+    background: purple;
+    color: white;
+    margin-left: 0px;
+}
+
+#question {
+}
+
+#startScreen {
+    text-align: center;
+}
+
+#start {
+    background: purple;
+    color: white;
+}
+
+.hide {
+    display: none;
+}
+
+.saveText {
+    float: left;
+}
+
+#submitInitials, #startOver, #clearScores {
+    background: purple;
+    color: white;
+}

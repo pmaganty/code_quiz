@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <title>Code Quiz</title>
+        <!--injecting bootstrap css-->
+        <link rel="stylesheet" 
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" 
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" 
+        crossorigin="anonymous">
+
+        <!--linking in style sheet-->
+        <link rel="stylesheet" href="./style.css">
+    </head>
+    <body>
+        <div id="main_div" class="container-fluid">
+            
+            <div id="wholeStart" class="row justify-content-center">
+                <div id="startScreen" class="col-sm-12 col-md-7 col-lg-7">
+                    <h1>CODING QUIZ</h1>
+                    <p id="instruction">This quiz will give you <var>questionLength</var> questions regarding coding concepts. Each question is multiple choice. You will have <var>timeLength</var> seconds to finish the quiz. If you get a question wrong, the timer will decrement by 15 seconds. Good Luck!</p>
+                    <button type="button" id="start">START QUIZ</button>
+                </div>
+            </div>
+
+            <div id="quiz" class="row justify-content-center">
+                <div class="col-sm-12 col-md-7 col-lg-7">
+                    <h1 id="question" class="row"></h1>
+                    <div class="row">
+                        <ul id="choices" class="col-sm-12 col-md-5 col-lg-5"></ul>
+                    </div>
+                    <div id="result" class="row"></div>
+                </div>
+            </div>
+
+            <div id="wholeEnd" class="row justify-content-center">
+                <div id="endScreen" class="col-sm-12 col-md-7 col-lg-7">
+                    <h1>All Done!</h1>
+                    <p>Your Score = <var>score</var></p>
+                    <form>
+                        Enter Intials: <input type="text" id="userInput">
+                        <button type="button" id="submitInitials">SUBMIT</button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="highScoreDiv" class="row justify-content-center">
+                    <div id="highscores" class="col-sm-12 col-md-7 col-lg-7">
+                        <h1>High Scores</h1>
+                        <button type="button" id="startOver">Go Back</button>
+                        <button type="button" id="clearScores">Clear High Scores</button>
+                    </div>
+            </div>
+        </div>
+
+        <script src="./questions.js"></script>
+        <script src="./script.js"></script>
+    </body>
+</html>
