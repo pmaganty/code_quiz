@@ -10,44 +10,42 @@ var mainDiv = document.querySelector("#main_div");
 var submitInitials = document.querySelector("#submitInitals");
 var userInput = document.querySelector("#userInput");
 var highScoreDiv = document.querySelector("#highScoreDiv");
+var time = document.querySelector("#time");
+var highScoreList = document.querySelector("#highScoreList");
+var easyScores = document.querySelector("#easyScores");
+var hardScores = document.querySelector("#hardScores");
+var advancedScores = document.querySelector("#advancedScores");
 var question;
 var choices_arr;
 var realAnswer;
+var questions_arr;
 
 var newChoice;
-var questionLength = questions.length;
+var questionLength = 5;
 var timeLength = questionLength * 15;
 var score = 0;
-var currentItem;
+var currentItem; 
+var quiz_type = 0;
+var timeLeft = timeLength;
+var wrong_answer = 0;
+var viewScores = 0;
 var userInfo = [];
-localStorage.setItem("userInfo", userInfo);
+localStorage.setItem('userInfo', JSON.stringify(userInfo));
+
+
 
 appendQuizToDom();
 
 function appendQuizToDom () {
     currentItem = 0;
     wholeStart.classList.remove("hide");
+    document.querySelector("#instruction").textContent = "This quiz will give you " + questionLength + " questions regarding coding concepts. Each question is multiple choice. You will have " + timeLength + " seconds to finish the quiz. If you get a question wrong, the timer will decrement by 15 seconds. Good Luck!";
     wholeEnd.classList.add("hide");
     highScoreDiv.classList.add("hide");
     //appendStartScreenToDom();
 }
 
-function appendStartScreenToDom () {
-    var start = document.createElement("h1");
-    var context = document.createElement("p");
-    var startButton = document.createElement("button");
-    startButton.setAttribute("type", "button");
-    startButton.setAttribute("id", "start");
-    context.setAttribute("id", "instruction");
-    start.textContent = "CODING QUIZ";
-    context.textContent = "This quiz will give you " + questionLength + " questions regarding coding concepts. Each question is multiple choice. You will have " + timeLength + " seconds to finish the quiz. If you get a question wrong, the timer will decrement by 15 seconds. Good Luck!";
-    startButton.textContent = "START QUIZ";
-    startScreen.appendChild(start);
-    startScreen.appendChild(context);
-    startScreen.appendChild(startButton);
-}
-
-function appendQuestionToDom () {
+function appendQuestionToDom (questions) {
     console.log("in appendQuestionToDom"); //FOR DEBUG
     for (var i = 0; i < questions.length; i++) {
         if (currentItem - 1 == i) {
@@ -61,38 +59,28 @@ function appendQuestionToDom () {
             choices_arr = questions[i].choices;
             for (var j = 0; j < choices_arr.length; j++) {
                 console.log(choices_arr[j]); //FOR DEBUG
-                newChoice = document.createElement("li");
+                //newChoice = document.createElement("li");
+                newChoice = document.createElement("button");
+                var extraLine = document.createElement("br");
+                newChoice.setAttribute("type", "button");
                 newChoice.setAttribute("id", "choice");
                 newChoice.setAttribute("data-item", choices_arr[j]);
                 //console.log("data-answer = " + newChoice.dataset.answer); //FOR DEBUG
-                newChoice.setAttribute("type", "button");
+                //newChoice.setAttribute("type", "button");
                 newChoice.textContent = j+1 + ". " + choices_arr[j];
+                newChoice.setAttribute("style", "margin-top: 10px;")
                 listOfChoices.appendChild(newChoice);
+                listOfChoices.appendChild(extraLine);
             }
             console.log("done with loop"); //FOR DEBUG
         }
     }
-}
+} 
 
 function appendEndScreenToDom () {
     quiz.classList.add("hide");
     wholeEnd.classList.remove("hide");
-    /*var initialText = document.createElement("h1");
-    var printScore = document.createElement("p");
-    var saveScore = document.createElement("div");
-    var saveScoreText = document.createElement("p");
-    var saveScoreInput = document.createElement("input");
-    saveScoreInput.setAttribute("type", "text");
-    saveScoreText.setAttribute("id", "saveText");
-    saveScoreText.textContent = "Enter Initials";
-    initialText.textContent = "All Done!";
-    printScore.textContent = "Your Score is " + score;
-    
-    endScreen.appendChild(initialText);
-    endScreen.appendChild(printScore);
-    endScreen.appendChild(saveScore);
-    saveScore.appendChild(saveScoreText);
-    saveScore.appendChild(saveScoreInput);*/
+    document.querySelector("#score").textContent = "Your Score = " + score;
 }
 
 function nextQuestion () {
@@ -101,56 +89,143 @@ function nextQuestion () {
     console.log("in function nextQuestion"); //FOR DEBUG
     currentItem++;
     console.log("currentItem = " + currentItem); //FOR DEBUG
-    if (currentItem > questions.length) {
+    if (quiz_type == 1) {
+        questions_arr = easy_questions;
+    } else if (quiz_type == 2) {
+        questions_arr = hard_questions;
+    } else if (quiz_type == 3) {
+        questions_arr = advanced_questions;
+    }
+
+    //time.textContent = "Time: " + timeLeft;
+
+
+
+    if (currentItem > questions_arr.length) {
         appendEndScreenToDom();
     } else {
-        appendQuestionToDom();
+        appendQuestionToDom(questions_arr);
     }
 }
 
 function compareAnswer (userAnswer) {
     console.log("inside compareAnswer"); //FOR DEBUG
     var rightOrWrong;
+
     if (userAnswer == realAnswer) {
         console.log("CORRECT ANSWER"); //FOR DEBUG
         result.textContent = "CORRECT!";
+        result.classList.add("showResultBorder");
+        setTimeout(function(){result.textContent = ""; result.classList.remove("showResultBorder");}, 500);
         score++;
     } else {
         console.log("WRONG ANSWER"); //FOR DEBUG
         result.textContent = "WRONG!";
+        result.classList.add("showResultBorder");
+        setTimeout(function(){result.textContent = ""; result.classList.remove("showResultBorder");}, 500);
+        wrong_answer = 1;
     }
 }
 
 function saveScores () {
     var initials = userInput.value.trim();
-    var info = {user: initials, score: score};
-    //userInfo.push(info);
+    var info;
+    if (initials == "") {
+        info = {user: "unknown", score: score, quiz: quiz_type};
+    } else {
+        info = {user: initials, score: score, quiz: quiz_type};
+    }
+    //userInfo.push({user: initials, score: score}); //FOR DEBUG
+    console.log(userInfo); //FOR DEBUG
     console.log(initials); //FOR DEBUG
-    var lastUser = localStorage.getItem("JSON.parse(userInfo)");
+    console.log(userInfo); //FOR DEBUG
+    var lastUser = JSON.parse(localStorage.getItem('userInfo'));
     console.log(lastUser); //FOR DEBUG
-    //lastUser.push(info);
+    lastUser.push(info);
     localStorage.setItem("userInfo", JSON.stringify(lastUser));
 }
 
 function showHighScores () {
     wholeEnd.classList.add("hide");
+    wholeStart.classList.add("hide");
     console.log("inside showHighScores"); //FOR DEBUG
-    //saveScores();
+    if (viewScores == 0) {
+        saveScores();
+    }
+    viewScores = 0;
     highScoreDiv.classList.remove("hide");
+    appendHighScoresToDom();
+}
 
+function appendHighScoresToDom () {
+    easyScores.innerHTML = "";
+    hardScores.innerHTML = "";
+    advancedScores.innerHTML = "";
+    var highScores = JSON.parse(localStorage.getItem('userInfo'));
+    console.log(highScores); //FOR DEBUG
+    var newHighScore;
+    for (var i = 0; i < highScores.length; i++) {
+        newHighScore = document.createElement("h6");
+        newHighScore.textContent = i+1 + ". " + highScores[i].user + " - " + highScores[i].score;
+        newHighScore.classList.add("eachHighScore");
+        if (highScores[i].quiz == 1) {
+            easyScores.appendChild(newHighScore);
+        } else if (highScores[i].quiz == 2) {
+            hardScores.appendChild(newHighScore);
+        } else if (highScores[i].quiz == 3) {
+            advancedScores.appendChild(newHighScore);
+        }
+    }
+}
+
+function quizTimer () {
+    var timeInterval = setInterval(function() {
+
+        if (timeLeft <= 0 || currentItem > questions_arr.length) {
+            console.log("TIME IS UP"); //FOR DEBUG
+            //timeLeft = 0;
+            time.textContent = "Time: 0";
+            appendEndScreenToDom();
+            clearInterval(timeInterval);
+        } else {
+            if (wrong_answer == 1) {
+                timeLeft = timeLeft - 15;
+            } else {
+                timeLeft--;
+            }
+            time.textContent = "Time: " + timeLeft;
+        }
+
+        //console.log(timeLeft); //FOR DEBUG
+
+        wrong_answer = 0;
+    
+    }, 1000);
 }
 
 listOfChoices.addEventListener("click",function(e) {
-    if (e.target && e.target.matches("li")) {
+    if (e.target && e.target.matches("button")) {
       console.log("button clicked"); //FOR DEBUG
       var userAnswer = e.target.dataset.item;
       console.log("user clicked on " + userAnswer); //FOR DEBUG
       compareAnswer(userAnswer);
       nextQuestion();
-      }
-  });
+    }
+});
 
-document.querySelector("#start").addEventListener("click", nextQuestion);
+function resetVars() {
+    score = 0; 
+    timeLeft = timeLength; 
+    time.textContent = "Time: " + timeLeft;
+}
+
+document.querySelector("#easy_start").addEventListener("click", function() {quiz_type = 1; resetVars(); quizTimer(); nextQuestion();});
+document.querySelector("#hard_start").addEventListener("click", function() {quiz_type = 2; resetVars(); quizTimer(); nextQuestion();});
+document.querySelector("#advanced_start").addEventListener("click", function() {quiz_type = 3; resetVars(); quizTimer(); nextQuestion();});
 document.querySelector("#submitInitials").addEventListener("click", showHighScores);
-//document.querySelector("#clearScores").addEventListener("click", nextQuestion);
+document.querySelector("#clearScores").addEventListener("click", function() {
+    easyScores.innerHTML = ""; hardScores.innerHTML = ""; advancedScores.innerHTML = ""; 
+    localStorage.clear(); localStorage.setItem('userInfo', JSON.stringify(userInfo));
+    });
 document.querySelector("#startOver").addEventListener("click", appendQuizToDom);
+document.querySelector("#viewHighScores").addEventListener("click", function() {viewScores = 1; showHighScores();});

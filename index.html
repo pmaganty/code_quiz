@@ -13,13 +13,21 @@
         <link rel="stylesheet" href="./style.css">
     </head>
     <body>
+
         <div id="main_div" class="container-fluid">
+            <header>
+                <p id="viewHighScores">View High Scores</p>
+                <p id="time">Time: 0</p>
+            </header>
             
             <div id="wholeStart" class="row justify-content-center">
                 <div id="startScreen" class="col-sm-12 col-md-7 col-lg-7">
-                    <h1>CODING QUIZ</h1>
-                    <p id="instruction">This quiz will give you <var>questionLength</var> questions regarding coding concepts. Each question is multiple choice. You will have <var>timeLength</var> seconds to finish the quiz. If you get a question wrong, the timer will decrement by 15 seconds. Good Luck!</p>
-                    <button type="button" id="start">START QUIZ</button>
+                    <h1 style="border-bottom: rgb(212, 134, 202) solid 2px;">CODING QUIZ</h1>
+                    <p id="instruction"></p>
+                    <h4>Please choose which quiz you would like to attempt.</h4>
+                    <button type="button" id="easy_start">EASY</button>
+                    <button type="button" id="hard_start">HARD</button>
+                    <button type="button" id="advanced_start">ADVANCED</button>
                 </div>
             </div>
 
@@ -27,16 +35,15 @@
                 <div class="col-sm-12 col-md-7 col-lg-7">
                     <h1 id="question" class="row"></h1>
                     <div class="row">
-                        <ul id="choices" class="col-sm-12 col-md-5 col-lg-5"></ul>
+                        <ul style="margin-top: 10px;" id="choices" class="col-sm-12 col-md-5 col-lg-5"></ul>
                     </div>
-                    <div id="result" class="row"></div>
                 </div>
             </div>
 
             <div id="wholeEnd" class="row justify-content-center">
                 <div id="endScreen" class="col-sm-12 col-md-7 col-lg-7">
                     <h1>All Done!</h1>
-                    <p>Your Score = <var>score</var></p>
+                    <p id="score"> Your Score = <var>score</var></p>
                     <form>
                         Enter Intials: <input type="text" id="userInput">
                         <button type="button" id="submitInitials">SUBMIT</button>
@@ -47,13 +54,34 @@
             <div id="highScoreDiv" class="row justify-content-center">
                     <div id="highscores" class="col-sm-12 col-md-7 col-lg-7">
                         <h1>High Scores</h1>
+                        <div class="row">
+                            <div id="highScoreList"></div>
+                            <div class="col-sm-12 col-md-4 col-lg-4">
+                                <h6 class="quizTypeText">Easy</h6>
+                                <div id="easyScores"></div>
+                            </div>
+                            <div class="col-sm-12 col-md-4 col-lg-4">
+                                <h6 class="quizTypeText">Hard</h6>
+                                <div id="hardScores"></div>
+                            </div>
+                            <div class="col-sm-12 col-md-4 col-lg-4">
+                                <h6 class="quizTypeText">Advanced</h6>
+                                <div id="advancedScores"></div>
+                            </div>
+                        </div>
                         <button type="button" id="startOver">Go Back</button>
                         <button type="button" id="clearScores">Clear High Scores</button>
                     </div>
             </div>
+            <div id="tellUser" class="row justify-content-center">
+                <div id="result" class="col-sm-12 col-md-7 col-lg-7"></div>
+            </div>
         </div>
 
         <script src="./questions.js"></script>
+        <script src="./easy_questions.js"></script>
+        <script src="./hard_questions.js"></script>
+        <script src="./advanced_questions.js"></script>
         <script src="./script.js"></script>
     </body>
 </html>

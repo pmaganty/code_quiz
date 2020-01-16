@@ -2,18 +2,18 @@
     background: purple;
     color: white;
     margin-left: 0px;
-}
-
-#question {
+    box-sizing: content-box !important;
 }
 
 #startScreen {
     text-align: center;
+    padding-bottom: 20px;
+    margin: 10px;
+    border: rgb(233, 220, 220) solid 2px;
 }
 
-#start {
-    background: purple;
-    color: white;
+#highscores {
+    text-align: center;
 }
 
 .hide {
@@ -24,7 +24,44 @@
     float: left;
 }
 
-#submitInitials, #startOver, #clearScores {
+#submitInitials, #startOver, #clearScores, #easy_start, #hard_start, #advanced_start {
     background: purple;
     color: white;
+}
+
+#viewHighScores {
+    float: left;
+    color: purple;
+    cursor: pointer;
+}
+
+#time {
+    float: right;
+}
+
+header {
+    height: 60px;
+}
+
+.eachHighScore {
+    background: rgb(243, 230, 243);
+    padding: 5px;
+}
+
+#result {
+    font-style: italic;
+}
+
+.showResultBorder {
+    border-top: rgb(240, 231, 231) solid 2px;  
+}
+
+.quizTypeText {
+    color: white;
+    background: rgb(219, 125, 219);
+    margin-top: 20px;
+}
+
+#wholeEnd {
+    margin-bottom: 20px;
 }
