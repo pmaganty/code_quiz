@@ -1,3 +1,4 @@
+/*************************START: VARIABLE DEFINITIONS & INITIALIZATIONS*************************/
 var result = document.querySelector("#result");
 var newQuestion = document.querySelector("#question");
 var listOfChoices = document.querySelector("#choices");
@@ -31,48 +32,42 @@ var wrong_answer = 0;
 var viewScores = 0;
 var userInfo = [];
 localStorage.setItem('userInfo', JSON.stringify(userInfo));
+/*************************END: VARIABLE DEFINITIONS & INITIALIZATIONS*************************/
 
 
 
-appendQuizToDom();
 
+
+
+/*************************START: FUNCTION DEFINITIONS*************************/
 function appendQuizToDom () {
     currentItem = 0;
     wholeStart.classList.remove("hide");
     document.querySelector("#instruction").textContent = "This quiz will give you " + questionLength + " questions regarding coding concepts. Each question is multiple choice. You will have " + timeLength + " seconds to finish the quiz. If you get a question wrong, the timer will decrement by 15 seconds. Good Luck!";
     wholeEnd.classList.add("hide");
     highScoreDiv.classList.add("hide");
-    //appendStartScreenToDom();
 }
 
 function appendQuestionToDom (questions) {
-    console.log("in appendQuestionToDom"); //FOR DEBUG
     for (var i = 0; i < questions.length; i++) {
         if (currentItem - 1 == i) {
             question = questions[i].title;
-            console.log("question = " + question); //FOR DEBUG
             realAnswer = questions[i].answer;
-            console.log("answer = " + realAnswer); //FOR DEBUG
             newQuestion.textContent = question;
 
             listOfChoices.innerHTML = "";
             choices_arr = questions[i].choices;
             for (var j = 0; j < choices_arr.length; j++) {
-                console.log(choices_arr[j]); //FOR DEBUG
-                //newChoice = document.createElement("li");
                 newChoice = document.createElement("button");
                 var extraLine = document.createElement("br");
                 newChoice.setAttribute("type", "button");
                 newChoice.setAttribute("id", "choice");
                 newChoice.setAttribute("data-item", choices_arr[j]);
-                //console.log("data-answer = " + newChoice.dataset.answer); //FOR DEBUG
-                //newChoice.setAttribute("type", "button");
                 newChoice.textContent = j+1 + ". " + choices_arr[j];
                 newChoice.setAttribute("style", "margin-top: 10px;")
                 listOfChoices.appendChild(newChoice);
                 listOfChoices.appendChild(extraLine);
             }
-            console.log("done with loop"); //FOR DEBUG
         }
     }
 } 
@@ -86,9 +81,7 @@ function appendEndScreenToDom () {
 function nextQuestion () {
     wholeStart.classList.add("hide");
     quiz.classList.remove("hide");
-    console.log("in function nextQuestion"); //FOR DEBUG
     currentItem++;
-    console.log("currentItem = " + currentItem); //FOR DEBUG
     if (quiz_type == 1) {
         questions_arr = easy_questions;
     } else if (quiz_type == 2) {
@@ -96,10 +89,6 @@ function nextQuestion () {
     } else if (quiz_type == 3) {
         questions_arr = advanced_questions;
     }
-
-    //time.textContent = "Time: " + timeLeft;
-
-
 
     if (currentItem > questions_arr.length) {
         appendEndScreenToDom();
@@ -109,17 +98,14 @@ function nextQuestion () {
 }
 
 function compareAnswer (userAnswer) {
-    console.log("inside compareAnswer"); //FOR DEBUG
     var rightOrWrong;
 
     if (userAnswer == realAnswer) {
-        console.log("CORRECT ANSWER"); //FOR DEBUG
         result.textContent = "CORRECT!";
         result.classList.add("showResultBorder");
         setTimeout(function(){result.textContent = ""; result.classList.remove("showResultBorder");}, 500);
         score++;
     } else {
-        console.log("WRONG ANSWER"); //FOR DEBUG
         result.textContent = "WRONG!";
         result.classList.add("showResultBorder");
         setTimeout(function(){result.textContent = ""; result.classList.remove("showResultBorder");}, 500);
@@ -135,12 +121,7 @@ function saveScores () {
     } else {
         info = {user: initials, score: score, quiz: quiz_type};
     }
-    //userInfo.push({user: initials, score: score}); //FOR DEBUG
-    console.log(userInfo); //FOR DEBUG
-    console.log(initials); //FOR DEBUG
-    console.log(userInfo); //FOR DEBUG
     var lastUser = JSON.parse(localStorage.getItem('userInfo'));
-    console.log(lastUser); //FOR DEBUG
     lastUser.push(info);
     localStorage.setItem("userInfo", JSON.stringify(lastUser));
 }
@@ -148,7 +129,6 @@ function saveScores () {
 function showHighScores () {
     wholeEnd.classList.add("hide");
     wholeStart.classList.add("hide");
-    console.log("inside showHighScores"); //FOR DEBUG
     if (viewScores == 0) {
         saveScores();
     }
@@ -162,7 +142,6 @@ function appendHighScoresToDom () {
     hardScores.innerHTML = "";
     advancedScores.innerHTML = "";
     var highScores = JSON.parse(localStorage.getItem('userInfo'));
-    console.log(highScores); //FOR DEBUG
     var newHighScore;
     for (var i = 0; i < highScores.length; i++) {
         newHighScore = document.createElement("h6");
@@ -182,8 +161,6 @@ function quizTimer () {
     var timeInterval = setInterval(function() {
 
         if (timeLeft <= 0 || currentItem > questions_arr.length) {
-            console.log("TIME IS UP"); //FOR DEBUG
-            //timeLeft = 0;
             time.textContent = "Time: 0";
             appendEndScreenToDom();
             clearInterval(timeInterval);
@@ -195,14 +172,23 @@ function quizTimer () {
             }
             time.textContent = "Time: " + timeLeft;
         }
-
-        //console.log(timeLeft); //FOR DEBUG
-
         wrong_answer = 0;
-    
     }, 1000);
 }
 
+function resetVars() {
+    score = 0; 
+    timeLeft = timeLength; 
+    time.textContent = "Time: " + timeLeft;
+}
+
+/*************************END: FUNCTION DEFINITIONS*************************/
+
+
+
+
+
+/*************************START: EVENT LISTENER DECLARATIONS*************************/
 listOfChoices.addEventListener("click",function(e) {
     if (e.target && e.target.matches("button")) {
       console.log("button clicked"); //FOR DEBUG
@@ -212,13 +198,6 @@ listOfChoices.addEventListener("click",function(e) {
       nextQuestion();
     }
 });
-
-function resetVars() {
-    score = 0; 
-    timeLeft = timeLength; 
-    time.textContent = "Time: " + timeLeft;
-}
-
 document.querySelector("#easy_start").addEventListener("click", function() {quiz_type = 1; resetVars(); quizTimer(); nextQuestion();});
 document.querySelector("#hard_start").addEventListener("click", function() {quiz_type = 2; resetVars(); quizTimer(); nextQuestion();});
 document.querySelector("#advanced_start").addEventListener("click", function() {quiz_type = 3; resetVars(); quizTimer(); nextQuestion();});
@@ -229,3 +208,13 @@ document.querySelector("#clearScores").addEventListener("click", function() {
     });
 document.querySelector("#startOver").addEventListener("click", appendQuizToDom);
 document.querySelector("#viewHighScores").addEventListener("click", function() {viewScores = 1; showHighScores();});
+
+/*************************END: EVENT LISTENER DECLARATIONS*************************/
+
+
+
+
+/**********************************************************/
+/***********CALLING FUNCTION TO INITIALIZE WEBSITE*********/
+appendQuizToDom();
+/**********************************************************/
