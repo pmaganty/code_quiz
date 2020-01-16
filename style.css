@@ -65,3 +65,7 @@ header {
 #wholeEnd {
     margin-bottom: 20px;
 }
+
+#easyScores, #hardScores, #advancedScores {
+    text-align: left;
+}
