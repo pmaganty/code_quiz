@@ -1,3 +1,7 @@
+/********************************************/
+//This array represents a quiz level "easy" option for user. It is an array of objects
+//and each object contains the following keys: title, choices, and answer
+/********************************************/
 var easy_questions = [
     {
       title: "The language typically associated with styling a webpage is ______",

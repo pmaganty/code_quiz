@@ -1,3 +1,7 @@
+/********************************************/
+//This array represents a quiz level "hard" option for user. It is an array of objects
+//and each object contains the following keys: title, choices, and answer
+/********************************************/
 var hard_questions = [
     {
         title: "Commonly used data types DO NOT include:",

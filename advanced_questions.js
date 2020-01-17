@@ -1,3 +1,7 @@
+/********************************************/
+//This array represents a quiz level "advanced" option for user. It is an array of objects
+//and each object contains the following keys: title, choices, and answer
+/********************************************/
 var advanced_questions = [
     {
         title: "Which coding language below is a hardware description language?",

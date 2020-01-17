@@ -22,7 +22,12 @@ var realAnswer;
 var questions_arr;
 
 var newChoice;
-var questionLength = 5;
+
+/***following variable should be set to amount of questions in each quiz***/
+/***for this code to work, each array of questions that represents a quiz will need to have the SAME number of questions***/
+/***see easy_questions.js, hard_questions.js, and advanced_questions.js for examples***/
+var questionLength = 5; 
+/***********************/
 var timeLength = questionLength * 15;
 var score = 0;
 var currentItem; 
@@ -40,6 +45,8 @@ localStorage.setItem('userInfo', JSON.stringify(userInfo));
 
 
 /*************************START: FUNCTION DEFINITIONS*************************/
+
+//initializes quiz by appending start screen to DOM and hiding all other things
 function appendQuizToDom () {
     currentItem = 0;
     wholeStart.classList.remove("hide");
@@ -48,6 +55,8 @@ function appendQuizToDom () {
     highScoreDiv.classList.add("hide");
 }
 
+//appends each question of quiz to DOM one at a time as user goes through the quiz, adding
+//event listeners to each answer choice so user can choose an answer
 function appendQuestionToDom (questions) {
     for (var i = 0; i < questions.length; i++) {
         if (currentItem - 1 == i) {
@@ -72,12 +81,15 @@ function appendQuestionToDom (questions) {
     }
 } 
 
+//appends the end screen to DOM when user finishes quiz or time is up
 function appendEndScreenToDom () {
     quiz.classList.add("hide");
     wholeEnd.classList.remove("hide");
     document.querySelector("#score").textContent = "Your Score = " + score;
 }
 
+//initializes each question of the quiz by figuring out which quiz user is taking and going into
+//appendQuestionToDom question when needed
 function nextQuestion () {
     wholeStart.classList.add("hide");
     quiz.classList.remove("hide");
@@ -97,6 +109,8 @@ function nextQuestion () {
     }
 }
 
+//compares user chosen answer to actual answer, incrementing score if it matches, and showing "right"
+//or "wrong" based on whether the answers match or not
 function compareAnswer (userAnswer) {
     var rightOrWrong;
 
@@ -113,6 +127,8 @@ function compareAnswer (userAnswer) {
     }
 }
 
+//saves the user's scores and intials to localStorage, saves "unknown" as initials
+//if user enters no initials
 function saveScores () {
     var initials = userInput.value.trim();
     var info;
@@ -126,6 +142,7 @@ function saveScores () {
     localStorage.setItem("userInfo", JSON.stringify(lastUser));
 }
 
+//initializes appending the high scores to the dom by hiding all other html and only showing high scores div
 function showHighScores () {
     wholeEnd.classList.add("hide");
     wholeStart.classList.add("hide");
@@ -137,6 +154,8 @@ function showHighScores () {
     appendHighScoresToDom();
 }
 
+//appends high scores elements to the dom, showing the scores for each quiz by going through localStorage
+//and appending each user/score pair to the DOM
 function appendHighScoresToDom () {
     easyScores.innerHTML = "";
     hardScores.innerHTML = "";
@@ -157,6 +176,9 @@ function appendHighScoresToDom () {
     }
 }
 
+//creates time for the quiz, starting when user chooses a quiz, and ending when user either finishes
+//quiz or time has run out. Timer will decrement by 15 seconds if user answers questions wrong,
+//and time will reset when quiz ends
 function quizTimer () {
     var timeInterval = setInterval(function() {
 
@@ -176,6 +198,8 @@ function quizTimer () {
     }, 1000);
 }
 
+//allows variables to be reset when quiz is started so that score starts at 0, time starts at proper length, and
+// timer shows the proper length on the DOM
 function resetVars() {
     score = 0; 
     timeLeft = timeLength; 
